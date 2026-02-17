@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+  <title>✨ mich · crypto 32-byte</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(145deg, #0b0e14 0%, #1a1f2a 100%);
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #eef2fb;
+    }
+
+    .token-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .generator-card {
+      background: rgba(18, 24, 33, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(74, 144, 226, 0.25);
+      border-radius: 48px 48px 40px 40px;
+      padding: 2.2rem 2rem;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+      transition: all 0.2s ease;
+    }
+
+    .top-badge {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.2rem;
+      flex-wrap: wrap;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .title-group i {
+      font-size: 2.2rem;
+      color: #6cd4ff;
+      filter: drop-shadow(0 0 6px #3d9cff88);
+    }
+
+    h1 {
+      font-weight: 650;
+      font-size: 1.9rem;
+      letter-spacing: -0.01em;
+      background: linear-gradient(120deg, #f0f9ff, #c7e2ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .security-badge {
+      background: #1e2b3c;
+      padding: 0.4rem 1.4rem;
+      border-radius: 100px;
+      border: 1px solid #397f9e60;
+      color: #bee2ff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      gap: 0.5rem;
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(4px);
+    }
+
+    .token-hero {
+      background: #0c111b;
+      border-radius: 28px;
+      padding: 0.2rem;
+      border: 1px solid #2b4055;
+      box-shadow: 0 8px 0 #06080c;
+      margin-bottom: 2rem;
+    }
+
+    .token-screen {
+      background: #0b0f16;
+      border-radius: 28px;
+      padding: 1.8rem 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-bottom: 1px solid #2f4a60;
+    }
+
+    #tokenOutput {
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", "Roboto Mono", monospace;
+      font-size: 1.7rem;
+      font-weight: 550;
+      letter-spacing: 2px;
+      color: #d1ecff;
+      text-shadow: 0 0 12px #0099ff44;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .icon-btn {
+      background: #1d2a36;
+      border: none;
+      color: #cbe5ff;
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: 0.16s;
+      border: 1px solid #3d5a73;
+      box-shadow: 0 5px 0 #0e141c;
+    }
+
+    .icon-btn:hover {
+      background: #274257;
+      color: white;
+      border-color: #66c0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #0e141c;
+    }
+
+    .icon-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #0e141c;
+    }
+
+    .options-panel {
+      background: rgba(12, 22, 32, 0.6);
+      border-radius: 28px;
+      padding: 1.8rem 1.9rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #2a4055;
+      backdrop-filter: blur(10px);
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 600;
+      margin-bottom: 1.4rem;
+      color: #b4dcff;
+      font-size: 1.1rem;
+    }
+
+    .encoding-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .encoding-option {
+      background: #111c26;
+      border: 1.5px solid #283c4c;
+      border-radius: 20px;
+      padding: 1rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: #b0d4ee;
+      transition: all 0.15s;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #0c131c;
+    }
+
+    .encoding-option i {
+      font-size: 1.6rem;
+      color: #6bc8ff;
+    }
+
+    .encoding-option span:first-of-type {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .encoding-option small {
+      font-size: 0.7rem;
+      opacity: 0.75;
+    }
+
+    .encoding-option.active {
+      background: #103349;
+      border-color: #3dabff;
+      color: white;
+      box-shadow: 0 0 12px #0099ff70, 0 3px 0 #005c99;
+    }
+
+    .extra-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.6rem;
+    }
+
+    .cool-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      user-select: none;
+      background: #0f1a22;
+      padding: 0.5rem 1.1rem;
+      border-radius: 40px;
+      border: 1px solid #2f4d64;
+      transition: background 0.1s;
+    }
+
+    .cool-toggle i { font-size: 1.1rem; color: #a0d0ff; }
+    .cool-toggle input { display: none; }
+
+    .toggle-slider {
+      width: 40px;
+      height: 22px;
+      background: #263b4a;
+      border-radius: 30px;
+      display: inline-block;
+      position: relative;
+      transition: 0.15s;
+      box-shadow: inset 0 1px 6px #00000055;
+    }
+
+    .toggle-slider::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      background: #b7dfff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: 0.18s;
+      box-shadow: 0 1px 4px black;
+    }
+
+    .cool-toggle input:checked + .toggle-slider { background: #0077be; }
+    .cool-toggle input:checked + .toggle-slider::after { left: 20px; background: white; }
+
+    .case-buttons {
+      display: flex;
+      gap: 0.6rem;
+      background: #0e1a20;
+      padding: 0.3rem;
+      border-radius: 50px;
+      border: 1px solid #2a4b60;
+    }
+
+    .case-btn {
+      background: transparent;
+      border: none;
+      color: #bbdef5;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: 0.1s;
+      cursor: pointer;
+    }
+
+    .case-btn.active-case {
+      background: #1e4a62;
+      color: white;
+      box-shadow: 0 2px 0 #0e2a38;
+    }
+
+    .history-area {
+      background: rgba(5, 13, 19, 0.7);
+      border-radius: 24px;
+      padding: 1.4rem 1.7rem;
+      backdrop-filter: blur(8px);
+      border: 1px solid #315569;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      max-height: 110px;
+      overflow-y: auto;
+      padding: 0.2rem 0.1rem;
+    }
+
+    .history-item {
+      background: #0e1d29;
+      border-radius: 18px;
+      padding: 0.55rem 1.2rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      border-left: 4px solid #3f92d0;
+      color: #d0ebff;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      box-shadow: 0 2px 6px #00000030;
+      word-break: break-all;
+    }
+
+    .history-item i { color: #59bfff; cursor: pointer; font-size: 0.9rem; }
+    .clear-history {
+      background: none;
+      border: 1px solid #3e6c84;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      color: #b1dcff;
+      font-weight: 500;
+      transition: 0.1s;
+      cursor: pointer;
+    }
+
+    .footnote {
+      margin-top: 1.2rem;
+      text-align: center;
+      color: #93b6c9;
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 550px) {
+      .generator-card { padding: 1.5rem 1.2rem; border-radius: 32px; }
+      .token-screen { flex-direction: column; align-items: flex-start; }
+      #tokenOutput { font-size: 1.25rem; }
+      .title-group h1 { font-size: 1.6rem; }
+      .encoding-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .fa-regular, .fas, .far { pointer-events: none; }
+  </style>
+</head>
+<body>
+<div class="token-container">
+  <div class="generator-card">
+    <div class="top-badge">
+      <div class="title-group">
+        <i class="fas fa-shield-halved"></i>
+        <h1>crypto·32</h1>
+      </div>
+      <div class="security-badge">
+        <i class="fas fa-lock"></i> <span id="encodingLabel">hex · 64 chars</span>
+      </div>
+    </div>
+
+    <div class="token-hero">
+      <div class="token-screen">
+        <span id="tokenOutput">a3f5c8d1e9b47a62f0c3b81d5e7a92c4f6b0d3e1a8c5f7b29e4d0a6c3f8b1e7d</span>
+        <div class="action-buttons">
+          <button class="icon-btn" id="copyBtn" title="Copy token"><i class="far fa-copy"></i></button>
+          <button class="icon-btn" id="refreshBtn" title="Generate new"><i class="fas fa-sync-alt"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="options-panel">
+      <div class="section-label"><i class="fas fa-code"></i> <span>ENCODING · 32 CRYPTO BYTES</span></div>
+
+      <div class="encoding-grid" id="encodingGrid">
+        <div class="encoding-option active" data-encoding="hex">
+          <i class="fas fa-hashtag"></i>
+          <span>hex</span>
+          <small>64 characters</small>
+        </div>
+        <div class="encoding-option" data-encoding="base64">
+          <i class="fas fa-equals"></i>
+          <span>base64</span>
+          <small>~44 chars</small>
+        </div>
+        <div class="encoding-option" data-encoding="base64url">
+          <i class="fas fa-link"></i>
+          <span>base64url</span>
+          <small>URL safe</small>
+        </div>
+        <div class="encoding-option" data-encoding="binary">
+          <i class="fas fa-0"></i>
+          <span>binary</span>
+          <small>256 bits</small>
+        </div>
+      </div>
+
+      <div class="extra-features">
+        <div class="toggle-group">
+          <label class="cool-toggle">
+            <i class="fas fa-font"></i>
+            <span>Uppercase hex</span>
+            <input type="checkbox" id="uppercaseToggle" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="case-buttons" id="caseStyleGroup">
+          <button id="lowerCaseBtn" class="case-btn active-case"><i class="fas fa-small-a"></i> lower</button>
+          <button id="upperCaseBtn" class="case-btn"><i class="fas fa-large-a"></i> UPPER</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-area">
+      <div class="history-header">
+        <span style="font-weight: 600; display: flex; gap: 6px"><i class="fas fa-clock-rotate-left"></i> recent tokens</span>
+        <button class="clear-history" id="clearHistoryBtn"><i class="fas fa-trash-alt"></i> clear</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+    <div class="footnote"><i class="fas fa-sparkles"></i> cryptographically strong · 256 bits</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    // ---------- state ----------
+    let currentRawBytes;                // Uint8Array(32)
+    let activeEncoding = 'hex';          // 'hex', 'base64', 'base64url', 'binary'
+    let uppercaseHex = false;
+    let history = [];
+
+    // DOM elements
+    const tokenEl = document.getElementById('tokenOutput');
+    const encodingLabel = document.getElementById('encodingLabel');
+    const encodingOptions = document.querySelectorAll('.encoding-option');
+    const uppercaseToggle = document.getElementById('uppercaseToggle');
+    const lowerCaseBtn = document.getElementById('lowerCaseBtn');
+    const upperCaseBtn = document.getElementById('upperCaseBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const historyListEl = document.getElementById('historyList');
+
+    // ---------- crypto random 32 bytes ----------
+    function getRandomBytes() {
+      const bytes = new Uint8Array(32);
+      if (window.crypto && window.crypto.getRandomValues) {
+        window.crypto.getRandomValues(bytes);
+      } else {
+        // fallback (should never happen on modern browsers)
+        for (let i = 0; i < 32; i++) {
+          bytes[i] = Math.floor(Math.random() * 256);
+        }
+      }
+      return bytes;
+    }
+
+    // ---------- encoding functions ----------
+    function bytesToHex(bytes) {
+      return Array.from(bytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    function bytesToBase64(bytes) {
+      // use built-in btoa but it expects binary string
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    function bytesToBase64Url(bytes) {
+      let base64 = bytesToBase64(bytes);
+      // make URL safe: replace + with -, / with _, remove padding =
+      return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    function bytesToBinary(bytes) {
+      return Array.from(bytes)
+        .map(b => b.toString(2).padStart(8, '0'))
+        .join(' ');
+    }
+
+    // format according to activeEncoding and case settings
+    function formatBytes(bytes) {
+      let encoded;
+      switch (activeEncoding) {
+        case 'hex':
+          encoded = bytesToHex(bytes);
+          if (uppercaseHex) encoded = encoded.toUpperCase();
+          else encoded = encoded.toLowerCase();
+          break;
+        case 'base64':
+          encoded = bytesToBase64(bytes);
+          break;
+        case 'base64url':
+          encoded = bytesToBase64Url(bytes);
+          break;
+        case 'binary':
+          encoded = bytesToBinary(bytes);
+          break;
+        default:
+          encoded = bytesToHex(bytes);
+      }
+      return encoded;
+    }
+
+    function generateNewToken() {
+      currentRawBytes = getRandomBytes();
+      const formatted = formatBytes(currentRawBytes);
+      tokenEl.textContent = formatted;
+      updateEncodingLabel();
+      addToHistory(formatted);
+    }
+
+    function updateEncodingLabel() {
+      let text = '';
+      switch (activeEncoding) {
+        case 'hex': text = 'hex · 64 chars'; break;
+        case 'base64': text = 'base64 · ~44 chars'; break;
+        case 'base64url': text = 'base64url · URL safe'; break;
+        case 'binary': text = 'binary · 256 bits'; break;
+        default: text = 'hex';
+      }
+      encodingLabel.textContent = text;
+    }
+
+    // refresh display from existing raw bytes (after toggle change)
+    function refreshDisplayFromCurrentBytes() {
+      if (!currentRawBytes) {
+        generateNewToken();
+        return;
+      }
+      const formatted = formatBytes(currentRawBytes);
+      tokenEl.textContent = formatted;
+      // we don't push to history again, just update display
+    }
+
+    function addToHistory(token) {
+      if (history.length > 0 && history[0] === token) return;
+      history.unshift(token);
+      if (history.length > 6) history.pop();
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (!historyListEl) return;
+      if (history.length === 0) {
+        historyListEl.innerHTML = '<div style="color:#7395a3; font-style:italic; padding:0.4rem;">✨ generate crypto tokens</div>';
+        return;
+      }
+      let html = '';
+      history.forEach(item => {
+        html += `<div class="history-item">
+                    <i class="fas fa-copy copy-history" data-value="${item.replace(/"/g, '&quot;')}"></i>
+                    <span style="word-break:break-all; font-size:0.85rem;">${item}</span>
+                </div>`;
+      });
+      historyListEl.innerHTML = html;
+      document.querySelectorAll('.copy-history').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+          const val = this.dataset.value;
+          copyToClipboard(val);
+        });
+      });
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        tokenEl.style.color = '#b5ffb9';
+        setTimeout(() => tokenEl.style.color = '', 200);
+      }).catch(() => alert('copy failed'));
+    }
+
+    // set active encoding from clicked element
+    function setActiveEncoding(el) {
+      encodingOptions.forEach(opt => opt.classList.remove('active'));
+      el.classList.add('active');
+      activeEncoding = el.dataset.encoding;
+      updateEncodingLabel();
+      // re-format current bytes with new encoding
+      if (currentRawBytes) {
+        const formatted = formatBytes(currentRawBytes);
+        tokenEl.textContent = formatted;
+        // we could also add to history? but user likely wants to keep same bytes.
+        // we'll not auto-add to history, just update display.
+      } else {
+        generateNewToken();
+      }
+    }
+
+    // sync UI from state
+    function syncCaseUI() {
+      uppercaseToggle.checked = uppercaseHex;
+
+      if (uppercaseHex) {
+        upperCaseBtn.classList.add('active-case');
+        lowerCaseBtn.classList.remove('active-case');
+      } else {
+        lowerCaseBtn.classList.add('active-case');
+        upperCaseBtn.classList.remove('active-case');
+      }
+
+      if (activeEncoding === 'hex') {
+        // only hex uses case
+        refreshDisplayFromCurrentBytes();
+      } else {
+        // for other encodings case toggle does nothing, but we keep state
+        if (currentRawBytes) {
+          tokenEl.textContent = formatBytes(currentRawBytes);
+        }
+      }
+    }
+
+    // ---------- event listeners ----------
+    encodingOptions.forEach(opt => {
+      opt.addEventListener('click', function() {
+        setActiveEncoding(this);
+      });
+    });
+
+    uppercaseToggle.addEventListener('change', function(e) {
+      uppercaseHex = e.target.checked;
+      syncCaseUI();
+    });
+
+    lowerCaseBtn.addEventListener('click', function() {
+      uppercaseHex = false;
+      uppercaseToggle.checked = false;
+      syncCaseUI();
+    });
+
+    upperCaseBtn.addEventListener('click', function() {
+      uppercaseHex = true;
+      uppercaseToggle.checked = true;
+      syncCaseUI();
+    });
+
+    refreshBtn.addEventListener('click', generateNewToken);
+
+    copyBtn.addEventListener('click', function() {
+      copyToClipboard(tokenEl.textContent);
+    });
+
+    clearHistoryBtn.addEventListener('click', function() {
+      history = [];
+      renderHistory();
+    });
+
+    // ---------- init ----------
+    function init() {
+      // set default active (hex)
+      const defaultOpt = document.querySelector('.encoding-option[data-encoding="hex"]');
+      if (defaultOpt) {
+        setActiveEncoding(defaultOpt);
+      } else {
+        activeEncoding = 'hex';
+      }
+
+      uppercaseHex = false;
+      uppercaseToggle.checked = false;
+      lowerCaseBtn.classList.add('active-case');
+      upperCaseBtn.classList.remove('active-case');
+
+      // generate first token
+      generateNewToken();
+
+      // add two example history items (optional)
+      history = [];
+      // but we'll let generateNewToken add one; add two more fake
+      addToHistory('f8a7e3d1b2c94a6f8e5d4c3b2a1f6e7d8c9b0a1f2e3d4c5b6a7f8e9d0c1b2a3');
+      addToHistory('xJ7cR9tL2pQ4mN6kH8jF3dG5sA1wE2rY4uI6oP9zC8vB7nM1kL9qW3eR5tY7u');
+      renderHistory();
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>
