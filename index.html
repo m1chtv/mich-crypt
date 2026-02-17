@@ -450,13 +450,11 @@
   (function() {
     "use strict";
 
-    // ---------- state ----------
-    let currentRawBytes;                // Uint8Array(32)
-    let activeEncoding = 'hex';          // 'hex', 'base64', 'base64url', 'binary'
+    let currentRawBytes;            
+    let activeEncoding = 'hex';      
     let uppercaseHex = false;
     let history = [];
 
-    // DOM elements
     const tokenEl = document.getElementById('tokenOutput');
     const encodingLabel = document.getElementById('encodingLabel');
     const encodingOptions = document.querySelectorAll('.encoding-option');
@@ -468,13 +466,11 @@
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
     const historyListEl = document.getElementById('historyList');
 
-    // ---------- crypto random 32 bytes ----------
     function getRandomBytes() {
       const bytes = new Uint8Array(32);
       if (window.crypto && window.crypto.getRandomValues) {
         window.crypto.getRandomValues(bytes);
       } else {
-        // fallback (should never happen on modern browsers)
         for (let i = 0; i < 32; i++) {
           bytes[i] = Math.floor(Math.random() * 256);
         }
@@ -482,7 +478,6 @@
       return bytes;
     }
 
-    // ---------- encoding functions ----------
     function bytesToHex(bytes) {
       return Array.from(bytes)
         .map(b => b.toString(16).padStart(2, '0'))
@@ -490,7 +485,6 @@
     }
 
     function bytesToBase64(bytes) {
-      // use built-in btoa but it expects binary string
       let binary = '';
       for (let i = 0; i < bytes.length; i++) {
         binary += String.fromCharCode(bytes[i]);
@@ -500,7 +494,6 @@
 
     function bytesToBase64Url(bytes) {
       let base64 = bytesToBase64(bytes);
-      // make URL safe: replace + with -, / with _, remove padding =
       return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     }
 
@@ -509,8 +502,6 @@
         .map(b => b.toString(2).padStart(8, '0'))
         .join(' ');
     }
-
-    // format according to activeEncoding and case settings
     function formatBytes(bytes) {
       let encoded;
       switch (activeEncoding) {
@@ -554,7 +545,6 @@
       encodingLabel.textContent = text;
     }
 
-    // refresh display from existing raw bytes (after toggle change)
     function refreshDisplayFromCurrentBytes() {
       if (!currentRawBytes) {
         generateNewToken();
@@ -562,7 +552,6 @@
       }
       const formatted = formatBytes(currentRawBytes);
       tokenEl.textContent = formatted;
-      // we don't push to history again, just update display
     }
 
     function addToHistory(token) {
@@ -601,24 +590,19 @@
       }).catch(() => alert('copy failed'));
     }
 
-    // set active encoding from clicked element
     function setActiveEncoding(el) {
       encodingOptions.forEach(opt => opt.classList.remove('active'));
       el.classList.add('active');
       activeEncoding = el.dataset.encoding;
       updateEncodingLabel();
-      // re-format current bytes with new encoding
       if (currentRawBytes) {
         const formatted = formatBytes(currentRawBytes);
         tokenEl.textContent = formatted;
-        // we could also add to history? but user likely wants to keep same bytes.
-        // we'll not auto-add to history, just update display.
       } else {
         generateNewToken();
       }
     }
 
-    // sync UI from state
     function syncCaseUI() {
       uppercaseToggle.checked = uppercaseHex;
 
@@ -631,17 +615,14 @@
       }
 
       if (activeEncoding === 'hex') {
-        // only hex uses case
         refreshDisplayFromCurrentBytes();
       } else {
-        // for other encodings case toggle does nothing, but we keep state
         if (currentRawBytes) {
           tokenEl.textContent = formatBytes(currentRawBytes);
         }
       }
     }
 
-    // ---------- event listeners ----------
     encodingOptions.forEach(opt => {
       opt.addEventListener('click', function() {
         setActiveEncoding(this);
@@ -676,9 +657,7 @@
       renderHistory();
     });
 
-    // ---------- init ----------
     function init() {
-      // set default active (hex)
       const defaultOpt = document.querySelector('.encoding-option[data-encoding="hex"]');
       if (defaultOpt) {
         setActiveEncoding(defaultOpt);
@@ -691,12 +670,9 @@
       lowerCaseBtn.classList.add('active-case');
       upperCaseBtn.classList.remove('active-case');
 
-      // generate first token
       generateNewToken();
 
-      // add two example history items (optional)
       history = [];
-      // but we'll let generateNewToken add one; add two more fake
       addToHistory('f8a7e3d1b2c94a6f8e5d4c3b2a1f6e7d8c9b0a1f2e3d4c5b6a7f8e9d0c1b2a3');
       addToHistory('xJ7cR9tL2pQ4mN6kH8jF3dG5sA1wE2rY4uI6oP9zC8vB7nM1kL9qW3eR5tY7u');
       renderHistory();
